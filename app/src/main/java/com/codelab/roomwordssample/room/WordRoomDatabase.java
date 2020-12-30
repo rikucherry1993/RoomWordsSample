@@ -23,8 +23,7 @@ public abstract class WordRoomDatabase extends RoomDatabase {
             // ★synchronized block --> synchronized (instance) : not allowed to be executed through multiple threads.
             synchronized (WordRoomDatabase.class) {
                 if (INSTANCE == null) {
-                    // Create database here
-                    // TODO: Learn more.
+                    // ★register a database#Callback in the database builder
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             WordRoomDatabase.class, "word_database")
                             .fallbackToDestructiveMigration() // ★migration strategy（销毁与创建）
@@ -57,6 +56,7 @@ public abstract class WordRoomDatabase extends RoomDatabase {
         // Initial words
         String[] words = {"Pancake","Cake","Cola"};
 
+        // constructor
         PopulateDbAsync(WordRoomDatabase db) {
             mDao = db.wordDao();
         }
