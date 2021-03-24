@@ -58,6 +58,11 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.ViewHo
     }
 
 
+    public Word getWordAtPosition (int position) {
+        return mList.get(position);
+    }
+
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         final RecyclerviewItemBinding listBinding;
