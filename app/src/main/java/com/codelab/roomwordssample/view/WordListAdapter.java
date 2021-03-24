@@ -20,6 +20,15 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.ViewHo
     private static final String TAG = WordListAdapter.class.getSimpleName();
     private List<Word> mList;
 
+    private OnClickCallBack mCallBack;
+    public interface OnClickCallBack {
+        void onClickItem(String word);
+    }
+
+    public WordListAdapter(OnClickCallBack callBack){
+        this.mCallBack = callBack;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // view binding (class name = layout's name + suffix(=Binding))
@@ -36,6 +45,11 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.ViewHo
         if (mList != null) {
             Word current = mList.get(position);
             holder.listBinding.textView.setText(current.getWord());
+
+            //note:避开在adapter传递，而是改在activity传递
+            holder.listBinding.wordItem.setOnClickListener(view -> {
+                mCallBack.onClickItem(current.getWord());
+            });
         } else {
             holder.listBinding.textView.setText("No Word");
         }

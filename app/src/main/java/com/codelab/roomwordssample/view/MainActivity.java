@@ -2,6 +2,7 @@ package com.codelab.roomwordssample.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,17 +15,19 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.codelab.roomwordssample.Constant;
 import com.codelab.roomwordssample.R;
 import com.codelab.roomwordssample.databinding.ActivityMainBinding;
 import com.codelab.roomwordssample.room.Word;
 import com.codelab.roomwordssample.viewmodel.WordViewModel;
 
+import static com.codelab.roomwordssample.Constant.EDITABLE_WORD;
 import static com.codelab.roomwordssample.Constant.NEW_WORD_ACTIVITY_REQUEST_CODE;
 
 /**
  * MainActivity
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements WordListAdapter.OnClickCallBack {
 
     // binding object
     private ActivityMainBinding binding;
@@ -43,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(binding.toolbar);
 
         // add RecyclerView to MainActivity
-        final WordListAdapter mAdapter = new WordListAdapter();
+        final WordListAdapter mAdapter = new WordListAdapter(this);
         binding.contentMain.recyclerview.setAdapter(mAdapter);
         binding.contentMain.recyclerview.setLayoutManager(new LinearLayoutManager(this));
 
@@ -70,8 +73,12 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == NEW_WORD_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            Word word = new Word(data.getStringExtra(NewWordActivity.EXTRA_REPLY));
-            mWordViewModel.insert(word);
+            Word newWord = new Word(data.getStringExtra(Constant.EXTRA_REPLY));
+            String oldWord = data.getStringExtra(Constant.EXTRA_OLD_WORD);
+            if (!TextUtils.isEmpty(oldWord)) {
+                mWordViewModel.deleteWord(new Word(oldWord));
+            }
+            mWordViewModel.insert(newWord);
         } else {
             Toast.makeText(getApplicationContext(),
                     R.string.empty_not_saved,
@@ -134,4 +141,11 @@ public class MainActivity extends AppCompatActivity {
         helper.attachToRecyclerView(binding.contentMain.recyclerview);
     }
 
+
+    @Override
+    public void onClickItem(String word) {
+        Intent i = new Intent(MainActivity.this, NewWordActivity.class);
+        i.putExtra(EDITABLE_WORD, word);
+        startActivityForResult(i, NEW_WORD_ACTIVITY_REQUEST_CODE);
+    }
 }
