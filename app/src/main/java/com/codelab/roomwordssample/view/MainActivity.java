@@ -22,7 +22,9 @@ import com.codelab.roomwordssample.room.Word;
 import com.codelab.roomwordssample.viewmodel.WordViewModel;
 
 import static com.codelab.roomwordssample.Constant.EDITABLE_WORD;
+import static com.codelab.roomwordssample.Constant.EXTRA_DATA_ID;
 import static com.codelab.roomwordssample.Constant.NEW_WORD_ACTIVITY_REQUEST_CODE;
+import static com.codelab.roomwordssample.Constant.UPDATE_WORD_ACTIVITY_REQUEST_CODE;
 
 /**
  * MainActivity
@@ -74,11 +76,16 @@ public class MainActivity extends AppCompatActivity implements WordListAdapter.O
 
         if (requestCode == NEW_WORD_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             Word newWord = new Word(data.getStringExtra(Constant.EXTRA_REPLY));
-            String oldWord = data.getStringExtra(Constant.EXTRA_OLD_WORD);
-            if (!TextUtils.isEmpty(oldWord)) {
-                mWordViewModel.deleteWord(new Word(oldWord));
-            }
             mWordViewModel.insert(newWord);
+        } else if (requestCode == UPDATE_WORD_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+            String word_data = data.getStringExtra(Constant.EXTRA_REPLY);
+            int id = data.getIntExtra(Constant.EXTRA_REPLY_ID, -1);
+            if (id != -1) {
+                mWordViewModel.updateWord(new Word(id, word_data));
+            } else {
+                Toast.makeText(this, R.string.unable_to_update,
+                        Toast.LENGTH_LONG).show();
+            }
         } else {
             Toast.makeText(getApplicationContext(),
                     R.string.empty_not_saved,
@@ -143,9 +150,10 @@ public class MainActivity extends AppCompatActivity implements WordListAdapter.O
 
 
     @Override
-    public void onClickItem(String word) {
-        Intent i = new Intent(MainActivity.this, NewWordActivity.class);
-        i.putExtra(EDITABLE_WORD, word);
-        startActivityForResult(i, NEW_WORD_ACTIVITY_REQUEST_CODE);
+    public void onClickItem(Word word) {
+        Intent i = new Intent(this, NewWordActivity.class);
+        i.putExtra(EDITABLE_WORD, word.getWord());
+        i.putExtra(EXTRA_DATA_ID, word.getId());
+        startActivityForResult(i, UPDATE_WORD_ACTIVITY_REQUEST_CODE);
     }
 }

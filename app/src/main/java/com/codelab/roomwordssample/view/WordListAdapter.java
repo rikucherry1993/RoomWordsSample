@@ -22,7 +22,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.ViewHo
 
     private OnClickCallBack mCallBack;
     public interface OnClickCallBack {
-        void onClickItem(String word);
+        void onClickItem(Word word);
     }
 
     public WordListAdapter(OnClickCallBack callBack){
@@ -48,7 +48,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.ViewHo
 
             //note:避开在adapter传递，而是改在activity传递
             holder.listBinding.wordItem.setOnClickListener(view -> {
-                mCallBack.onClickItem(current.getWord());
+                mCallBack.onClickItem(current);
             });
         } else {
             holder.listBinding.textView.setText("No Word");

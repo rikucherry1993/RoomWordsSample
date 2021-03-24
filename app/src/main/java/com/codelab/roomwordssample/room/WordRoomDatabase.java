@@ -12,7 +12,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 /**
  * WordRoomDatabase
  */
-@Database(entities = {Word.class}, version = 1, exportSchema = false)
+@Database(entities = {Word.class}, version = 2, exportSchema = false)
 public abstract class WordRoomDatabase extends RoomDatabase {
 
     // create the object as a singleton to prevent multiple DB accessing.
