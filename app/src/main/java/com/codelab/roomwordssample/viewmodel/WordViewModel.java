@@ -5,16 +5,15 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.paging.PagedList;
 
 import com.codelab.roomwordssample.repository.WordRepository;
 import com.codelab.roomwordssample.room.Word;
 
-import java.util.List;
-
 public class WordViewModel extends AndroidViewModel {
 
     private WordRepository mRepository;
-    private LiveData<List<Word>> mAllWords;
+    private LiveData<PagedList<Word>> mAllWords;
 
     public WordViewModel(@NonNull Application application) {
         super(application);
@@ -23,7 +22,7 @@ public class WordViewModel extends AndroidViewModel {
     }
 
 
-    public LiveData<List<Word>> getAllWords(){
+    public LiveData<PagedList<Word>> getAllWords(){
         return mAllWords;
     }
 

@@ -2,7 +2,6 @@ package com.codelab.roomwordssample.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,7 +28,7 @@ import static com.codelab.roomwordssample.Constant.UPDATE_WORD_ACTIVITY_REQUEST_
 /**
  * MainActivity
  */
-public class MainActivity extends AppCompatActivity implements WordListAdapter.OnClickCallBack {
+public class MainActivity extends AppCompatActivity implements WordListAdapter.MyOnClickListener{
 
     // binding object
     private ActivityMainBinding binding;
@@ -58,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements WordListAdapter.O
                 getDefaultViewModelProviderFactory()).get(WordViewModel.class);
 
         // observe lifeData
-        mWordViewModel.getAllWords().observe(this, words -> mAdapter.setWords(words));
+        mWordViewModel.getAllWords().observe(this, mAdapter::submitList);
 
         binding.fab.setOnClickListener(view1 -> {
             Intent intent = new Intent(MainActivity.this, NewWordActivity.class);

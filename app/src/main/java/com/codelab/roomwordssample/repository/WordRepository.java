@@ -4,28 +4,30 @@ import android.app.Application;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
+import androidx.paging.LivePagedListBuilder;
+import androidx.paging.PagedList;
 
 import com.codelab.roomwordssample.room.Word;
 import com.codelab.roomwordssample.room.WordDao;
 import com.codelab.roomwordssample.room.WordRoomDatabase;
 
-import java.util.List;
-
 @SuppressWarnings("ALL")
 public class WordRepository {
 
     private WordDao mWordDao;
-    private LiveData<List<Word>> mAllWords;
+    private final LiveData<PagedList<Word>> mAllWords;
 
 
     public WordRepository(Application application) {
         WordRoomDatabase db = WordRoomDatabase.getDatabase(application);
         mWordDao = db.wordDao();
-        mAllWords = mWordDao.getAllWords();
+        mAllWords = new LivePagedListBuilder<>(mWordDao.getAllWords(),/*page size*/ 10)
+                .setInitialLoadKey(1)
+                .build();
     }
 
     // Pass word list from dao(room db) to the front layers(viewModel, views...).
-    public LiveData<List<Word>> getAllWords(){
+    public LiveData<PagedList<Word>> getAllWords(){
         return mAllWords;
     }
 
