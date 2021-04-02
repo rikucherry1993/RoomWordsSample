@@ -14,6 +14,14 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // note: 允许保存schema
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+                //use += because just using equals overwrites anything set previously.
+            }
+        }
     }
 
     buildTypes {

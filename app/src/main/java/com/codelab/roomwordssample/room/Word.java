@@ -16,13 +16,20 @@ public class Word {
     @ColumnInfo(name = "word")
     private String mWord;
 
-    public Word(@NonNull String word) {
-        this.mWord = word ;}
+    @NonNull
+    @ColumnInfo(name = "updateTime")
+    private String mUpdateTime;
+
+    public Word(@NonNull String word, @NonNull String updateTime) {
+        this.mWord = word ;
+        this.mUpdateTime = updateTime;
+    }
 
     @Ignore
-    public Word(int id, @NonNull String word) {
+    public Word(int id, @NonNull String word, @NonNull String mUpdateTime) {
         this.mWord = word ;
         this.id = id;
+        this.mUpdateTime = mUpdateTime;
     }
 
     public String getWord() {
@@ -35,6 +42,14 @@ public class Word {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getUpdateTime() {
+        return mUpdateTime;
+    }
+
+    public void setUpdateTime(String UpdateTime) {
+        this.mUpdateTime = UpdateTime;
     }
 
 

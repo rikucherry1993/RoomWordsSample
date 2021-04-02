@@ -74,13 +74,13 @@ public class MainActivity extends AppCompatActivity implements WordListAdapter.M
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == NEW_WORD_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            Word newWord = new Word(data.getStringExtra(Constant.EXTRA_REPLY));
+            Word newWord = new Word(data.getStringExtra(Constant.EXTRA_REPLY), String.valueOf(System.currentTimeMillis()));
             mWordViewModel.insert(newWord);
         } else if (requestCode == UPDATE_WORD_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             String word_data = data.getStringExtra(Constant.EXTRA_REPLY);
             int id = data.getIntExtra(Constant.EXTRA_REPLY_ID, -1);
             if (id != -1) {
-                mWordViewModel.updateWord(new Word(id, word_data));
+                mWordViewModel.updateWord(new Word(id, word_data, String.valueOf(System.currentTimeMillis())));
             } else {
                 Toast.makeText(this, R.string.unable_to_update,
                         Toast.LENGTH_LONG).show();
