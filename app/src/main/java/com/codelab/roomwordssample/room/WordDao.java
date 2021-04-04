@@ -24,8 +24,8 @@ public interface WordDao {
      * Get data wrapped with LiveData<> from SQLite DB.
      * @return DataSource.Factory<Integer, Word>
      */
-    @Query("SELECT * from word_table ORDER BY word ASC")
-    DataSource.Factory<Integer, Word> getAllWords();
+    @Query("SELECT * from word_table")
+    DataSource.Factory<Integer,Word> getAllWords();
 
     //返回数组是为啥子？
     @Query("SELECT * from word_table LIMIT 1")

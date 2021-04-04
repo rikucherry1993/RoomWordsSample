@@ -18,15 +18,15 @@ public class Word {
 
     @NonNull
     @ColumnInfo(name = "updateTime")
-    private String mUpdateTime;
+    private Long mUpdateTime;
 
-    public Word(@NonNull String word, @NonNull String updateTime) {
+    public Word(@NonNull String word, @NonNull Long updateTime) {
         this.mWord = word ;
         this.mUpdateTime = updateTime;
     }
 
     @Ignore
-    public Word(int id, @NonNull String word, @NonNull String mUpdateTime) {
+    public Word(int id, @NonNull String word, @NonNull Long mUpdateTime) {
         this.mWord = word ;
         this.id = id;
         this.mUpdateTime = mUpdateTime;
@@ -44,11 +44,11 @@ public class Word {
         this.id = id;
     }
 
-    public String getUpdateTime() {
+    public Long getUpdateTime() {
         return mUpdateTime;
     }
 
-    public void setUpdateTime(String UpdateTime) {
+    public void setUpdateTime(Long UpdateTime) {
         this.mUpdateTime = UpdateTime;
     }
 

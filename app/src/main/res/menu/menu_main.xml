@@ -7,4 +7,22 @@
         android:orderInCategory="100"
         android:title = "@string/clear_all_data"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/time_desc"
+        android:orderInCategory="100"
+        android:title = "Sort by Update Time"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/id_asc"
+        android:orderInCategory="100"
+        android:title = "Sort by ID"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/word_asc"
+        android:orderInCategory="100"
+        android:title = "Sort by Word"
+        app:showAsAction="never" />
 </menu>

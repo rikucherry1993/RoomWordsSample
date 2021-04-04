@@ -12,7 +12,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 /**
  * WordRoomDatabase
  */
-@Database(entities = {Word.class}, version = 3, exportSchema = true)
+@Database(entities = {Word.class}, version = 4, exportSchema = true)
 public abstract class WordRoomDatabase extends RoomDatabase {
 
     // create the object as a singleton to prevent multiple DB accessing.
@@ -84,7 +84,7 @@ public abstract class WordRoomDatabase extends RoomDatabase {
             // 只在db为空的时候插入默认数据
             if (mDao.getAnyWord().length < 1) {
                 for (int i = 0; i <= words.length - 1; i++) {
-                    Word word = new Word(words[i], String.valueOf(System.currentTimeMillis()));
+                    Word word = new Word(words[i], System.currentTimeMillis());
                     mDao.insert(word);
                 }
             }

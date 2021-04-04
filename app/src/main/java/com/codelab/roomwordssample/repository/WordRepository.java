@@ -3,9 +3,7 @@ package com.codelab.roomwordssample.repository;
 import android.app.Application;
 import android.os.AsyncTask;
 
-import androidx.lifecycle.LiveData;
-import androidx.paging.LivePagedListBuilder;
-import androidx.paging.PagedList;
+import androidx.paging.DataSource;
 
 import com.codelab.roomwordssample.room.Word;
 import com.codelab.roomwordssample.room.WordDao;
@@ -15,20 +13,17 @@ import com.codelab.roomwordssample.room.WordRoomDatabase;
 public class WordRepository {
 
     private WordDao mWordDao;
-    private final LiveData<PagedList<Word>> mAllWords;
-
+    private DataSource.Factory<Integer, Word> mSourceList;
 
     public WordRepository(Application application) {
         WordRoomDatabase db = WordRoomDatabase.getDatabase(application);
         mWordDao = db.wordDao();
-        mAllWords = new LivePagedListBuilder<>(mWordDao.getAllWords(),/*page size*/ 10)
-                .setInitialLoadKey(1)
-                .build();
+        mSourceList = mWordDao.getAllWords();
     }
 
     // Pass word list from dao(room db) to the front layers(viewModel, views...).
-    public LiveData<PagedList<Word>> getAllWords(){
-        return mAllWords;
+    public DataSource.Factory<Integer,Word> getAllWords(){
+        return mSourceList;
     }
 
     // insert one word
