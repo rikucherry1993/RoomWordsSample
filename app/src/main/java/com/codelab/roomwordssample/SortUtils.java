@@ -1,8 +1,5 @@
 package com.codelab.roomwordssample;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
 import androidx.arch.core.util.Function;
 
 import com.codelab.roomwordssample.room.Word;
@@ -10,7 +7,6 @@ import com.codelab.roomwordssample.room.Word;
 import java.util.Comparator;
 import java.util.List;
 
-@RequiresApi(api = Build.VERSION_CODES.N)
 public class SortUtils {
 
     public enum SORT_KEY {

@@ -1,7 +1,6 @@
 package com.codelab.roomwordssample.view;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,7 +8,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -41,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements WordListAdapter.M
 
     private  WordListAdapter mAdapter;
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,8 +103,7 @@ public class MainActivity extends AppCompatActivity implements WordListAdapter.M
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
+    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
