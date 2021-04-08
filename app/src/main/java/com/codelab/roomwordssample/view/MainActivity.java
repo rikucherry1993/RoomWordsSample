@@ -2,7 +2,6 @@ package com.codelab.roomwordssample.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.codelab.roomwordssample.Constant;
 import com.codelab.roomwordssample.R;
+import com.codelab.roomwordssample.SortUtils;
 import com.codelab.roomwordssample.databinding.ActivityMainBinding;
 import com.codelab.roomwordssample.room.Word;
 import com.codelab.roomwordssample.viewmodel.WordViewModel;
@@ -29,13 +29,15 @@ import static com.codelab.roomwordssample.Constant.UPDATE_WORD_ACTIVITY_REQUEST_
 /**
  * MainActivity
  */
-public class MainActivity extends AppCompatActivity implements WordListAdapter.OnClickCallBack {
+public class MainActivity extends AppCompatActivity implements WordListAdapter.MyOnClickListener{
 
     // binding object
     private ActivityMainBinding binding;
 
     // view model
     private WordViewModel mWordViewModel;
+
+    private  WordListAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements WordListAdapter.O
         setSupportActionBar(binding.toolbar);
 
         // add RecyclerView to MainActivity
-        final WordListAdapter mAdapter = new WordListAdapter(this);
+        mAdapter = new WordListAdapter(this);
         binding.contentMain.recyclerview.setAdapter(mAdapter);
         binding.contentMain.recyclerview.setLayoutManager(new LinearLayoutManager(this));
 
@@ -58,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements WordListAdapter.O
                 getDefaultViewModelProviderFactory()).get(WordViewModel.class);
 
         // observe lifeData
-        mWordViewModel.getAllWords().observe(this, words -> mAdapter.setWords(words));
+        mWordViewModel.getAllWords(SortUtils.SORT_KEY.DEFAULT).observe(this, mAdapter::submitList);
 
         binding.fab.setOnClickListener(view1 -> {
             Intent intent = new Intent(MainActivity.this, NewWordActivity.class);
@@ -75,13 +77,13 @@ public class MainActivity extends AppCompatActivity implements WordListAdapter.O
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == NEW_WORD_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            Word newWord = new Word(data.getStringExtra(Constant.EXTRA_REPLY));
+            Word newWord = new Word(data.getStringExtra(Constant.EXTRA_REPLY), System.currentTimeMillis());
             mWordViewModel.insert(newWord);
         } else if (requestCode == UPDATE_WORD_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             String word_data = data.getStringExtra(Constant.EXTRA_REPLY);
             int id = data.getIntExtra(Constant.EXTRA_REPLY_ID, -1);
             if (id != -1) {
-                mWordViewModel.updateWord(new Word(id, word_data));
+                mWordViewModel.updateWord(new Word(id, word_data, System.currentTimeMillis()));
             } else {
                 Toast.makeText(this, R.string.unable_to_update,
                         Toast.LENGTH_LONG).show();
@@ -101,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements WordListAdapter.O
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
+    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -117,6 +119,22 @@ public class MainActivity extends AppCompatActivity implements WordListAdapter.O
             mWordViewModel.deleteAll();
             return true;
         }
+
+        if (id == R.id.time_desc) {
+            mWordViewModel.getAllWords(SortUtils.SORT_KEY.TIME_DESC).observe(this, mAdapter::submitList);
+            return true;
+        }
+
+        if (id == R.id.id_asc) {
+            mWordViewModel.getAllWords(SortUtils.SORT_KEY.ID_ASC).observe(this, mAdapter::submitList);
+            return true;
+        }
+
+        if (id == R.id.word_asc) {
+            mWordViewModel.getAllWords(SortUtils.SORT_KEY.WORD_ASC).observe(this, mAdapter::submitList);
+            return true;
+        }
+
 
         return super.onOptionsItemSelected(item);
     }

@@ -3,30 +3,32 @@ package com.codelab.roomwordssample.view;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+import androidx.paging.PagedListAdapter;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.codelab.roomwordssample.R;
 import com.codelab.roomwordssample.databinding.RecyclerviewItemBinding;
 import com.codelab.roomwordssample.room.Word;
 
-import java.util.List;
-
 /**
  *  WordListAdapter
  */
-public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.ViewHolder> {
+public class WordListAdapter extends PagedListAdapter<Word, WordListAdapter.ViewHolder> {
 
     private static final String TAG = WordListAdapter.class.getSimpleName();
-    private List<Word> mList;
 
-    private OnClickCallBack mCallBack;
-    public interface OnClickCallBack {
+    private MyOnClickListener mListener;
+
+    public interface MyOnClickListener {
         void onClickItem(Word word);
     }
 
-    public WordListAdapter(OnClickCallBack callBack){
-        this.mCallBack = callBack;
+    public WordListAdapter(MyOnClickListener listener){
+        super(DIFF_CALLBACK);
+        this.mListener = listener;
     }
 
     @Override
@@ -42,38 +44,21 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        if (mList != null) {
-            Word current = mList.get(position);
-            holder.listBinding.textView.setText(current.getWord());
+            Word current = getItem(position);
+            if (current != null) {
+                holder.listBinding.textView.setText(current.getWord());
 
-            //note:避开在adapter传递，而是改在activity传递
-            holder.listBinding.wordItem.setOnClickListener(view -> {
-                mCallBack.onClickItem(current);
-            });
-        } else {
-            holder.listBinding.textView.setText("No Word");
-        }
+                //note:避开在adapter传递，而是改在activity传递
+                holder.listBinding.wordItem.setOnClickListener(view -> {
+                    mListener.onClickItem(current);
+                });
+            } else {
+                holder.listBinding.textView.setText("No Word");
+            }
     }
 
-
-    @Override
-    public int getItemCount() {
-        if (mList == null) {
-            return 0;
-        }
-
-        return mList.size();
-    }
-
-
-    public void setWords(List<Word> list) {
-        mList = list;
-        notifyDataSetChanged();
-    }
-
-
-    public Word getWordAtPosition (int position) {
-        return mList.get(position);
+    public Word getWordAtPosition(int position) {
+        return getItem(position);
     }
 
 
@@ -88,5 +73,17 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.ViewHo
 
         }
     }
+
+    private static DiffUtil.ItemCallback<Word> DIFF_CALLBACK = new DiffUtil.ItemCallback<Word>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Word oldItem, @NonNull Word newItem) {
+            return oldItem.getId() == newItem.getId();
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Word oldItem, @NonNull Word newItem) {
+            return oldItem.getWord().equals(newItem.getWord());
+        }
+    };
 
 }

@@ -1,14 +1,12 @@
 package com.codelab.roomwordssample.room;
 
-import androidx.lifecycle.LiveData;
+import androidx.paging.DataSource;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
-
-import java.util.List;
 
 /**
  * WordDao
@@ -24,10 +22,10 @@ public interface WordDao {
 
     /**
      * Get data wrapped with LiveData<> from SQLite DB.
-     * @return LiveData<List<Word>>
+     * @return DataSource.Factory<Integer, Word>
      */
-    @Query("SELECT * from word_table ORDER BY word ASC")
-    LiveData<List<Word>> getAllWords();
+    @Query("SELECT * from word_table")
+    DataSource.Factory<Integer,Word> getAllWords();
 
     //返回数组是为啥子？
     @Query("SELECT * from word_table LIMIT 1")
