@@ -46,9 +46,6 @@ import static androidx.test.espresso.action.ViewActions.doubleClick;
 import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.action.ViewActions.pressBack;
 import static androidx.test.espresso.action.ViewActions.pressKey;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
-import static androidx.test.espresso.action.ViewActions.swipeLeft;
-import static androidx.test.espresso.action.ViewActions.swipeRight;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
@@ -89,28 +86,16 @@ public class MyTestBase implements CommonDatabase, CommonPerform, CommonAssert {
     }
 
     /**
-     * swipe to left
+     * Perform action on item at position.
+     *
+     * @param id       RecyclerView's id
+     * @param position Position of the item.
+     * @param action   Action
      */
-    public void leftSwipe(int id) throws InterruptedException {
-        onView(withId(id)).perform(swipeLeft());
-
+    @Override
+    public void onPerformActionOnItemAtPosition(final int id, final int position, final ViewAction action) {
+        onView(withId(id)).perform(RecyclerViewActions.actionOnItemAtPosition(position, action));
     }
-
-    /**
-     * swipe to right
-     */
-    public void rightSwipe(int id) throws InterruptedException {
-        onView(withId(id)).perform(swipeRight());
-    }
-
-
-    /**
-     * scroll down
-     */
-    public void downScroll(int id) throws InterruptedException {
-        onView(withId(id)).perform(scrollTo());
-    }
-
 
     /**
      * perform click list View item
@@ -410,17 +395,6 @@ public class MyTestBase implements CommonDatabase, CommonPerform, CommonAssert {
 
     }
 
-    /**
-     * Perform action on item at position.
-     *
-     * @param id       RecyclerView's id
-     * @param position Position of the item.
-     */
-    @Override
-    public void onPerformActionOnItemAtPosition(final int id, final int position) {
-        onView(withId(id)).perform(RecyclerViewActions.actionOnItemAtPosition(position, click()));
-    }
-
 
     /**
      * Perform action on click item in a decor view.
@@ -664,6 +638,18 @@ public class MyTestBase implements CommonDatabase, CommonPerform, CommonAssert {
     public void assertHasDescendantOnItem(final int id, final int position, final String expected) {
         onView(withId(id))
                 .check(matches(atPosition(position, hasDescendant(withText(expected)))));
+    }
+
+    /**
+     * Assert if the RecyclerView has NO expected descendant Data
+     *
+     * @param id
+     * @param expected
+     */
+    @Override
+    public void assertHasNoDescendant(final int id, final String expected) {
+        onView(withId(id))
+                .check(matches(not(hasDescendant(withText(expected)))));
     }
 
 
