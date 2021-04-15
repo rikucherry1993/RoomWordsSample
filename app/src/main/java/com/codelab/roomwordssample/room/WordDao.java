@@ -1,5 +1,6 @@
 package com.codelab.roomwordssample.room;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.paging.DataSource;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -36,5 +37,9 @@ public interface WordDao {
 
     @Update
     void updateWord(Word... word);
+
+    @VisibleForTesting
+    @Query("SELECT * FROM word_table WHERE word = :word LIMIT 1")
+    Word[] getWordByName(String word);
 
 }

@@ -24,6 +24,7 @@ public interface CommonAssert {
     void assertIsDialogWithText(final int id, final int expected);
     void assertStartActivity(final String expected);
     void assertHasDescendantOnItem(final int id, final int position, final String expected);
+    void assertHasNoDescendant(final int id, final String expected);
     void assertHasDescendantOnItemId(final int id, final int itemId, final String expected);
     void assertWithBackGroundColor(final int id, final int color);
     void assertIsChecked(final int id);
